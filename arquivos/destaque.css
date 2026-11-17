@@ -1,0 +1,41 @@
+/* Tratamento do destaque: imagem mais viva e transição suave para o azul petróleo. */
+.hero {
+  position: relative;
+  isolation: isolate;
+  min-height: 480px;
+  background: none;
+}
+
+.hero::before,
+.hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.hero::before {
+  z-index: -2;
+  background: url('/static/imagens/ponte-hercilio-luz.jpg') center 52% / cover;
+  filter: saturate(1.16) contrast(1.08);
+}
+
+.hero::after {
+  z-index: -1;
+  background:
+    linear-gradient(90deg, rgba(40, 82, 96, .92) 0%, rgba(40, 82, 96, .72) 28%, rgba(40, 82, 96, .28) 58%, rgba(40, 82, 96, .04) 100%),
+    linear-gradient(0deg, rgba(40, 82, 96, .5), transparent 40%);
+}
+
+.hero-conteudo {
+  position: relative;
+  z-index: 1;
+}
+
+@media (max-width: 650px) {
+  .hero { min-height: 390px; }
+  .hero::after {
+    background: linear-gradient(90deg, rgba(40, 82, 96, .9), rgba(40, 82, 96, .5)),
+      linear-gradient(0deg, rgba(40, 82, 96, .55), transparent 48%);
+  }
+}
