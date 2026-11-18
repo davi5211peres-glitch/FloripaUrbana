@@ -1,3 +1,57 @@
 <!doctype html>
-<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>{% if ponto %}{{ ponto.nome }}{% else %}Ponto não encontrado{% endif %} | Floripa Urbana</title><link rel="stylesheet" href="{{ url_for('static', filename='estilo.css') }}"></head>
-<body><header class="topo"><a class="marca" href="{{ url_for('inicio') }}">Floripa Urbana</a><nav><a href="{{ url_for('mapa') }}">Mapa</a><a href="{{ url_for('inicio') }}">Início</a></nav></header><main class="secao detalhe">{% if ponto %}<p class="sobretitulo">Ponto turístico</p><h1>{{ ponto.nome }}</h1>{% if ponto.imagem %}<img class="imagem-detalhe" src="{{ url_for('static', filename='imagens/' ~ ponto.imagem) }}" alt="{{ ponto.nome }}">{% endif %}<p>{{ ponto.descricao }}</p><p class="coordenadas">{{ ponto.latitude }}, {{ ponto.longitude }}</p><a href="{{ url_for('mapa') }}">← Voltar ao mapa</a>{% else %}<h1>Ponto não encontrado</h1><p>Este lugar não está cadastrado.</p><a href="{{ url_for('mapa') }}">Voltar ao mapa</a>{% endif %}</main><footer>Floripa Urbana</footer></body></html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>
+        {% if ponto %}{{ ponto.nome }}{% else %}Ponto não encontrado{% endif %} | Floripa Urbana
+    </title><link rel="stylesheet" href="{{ url_for('static', filename='estilo.css') }}">
+</head>
+<body>
+    <header class="topo">
+        <a class="marca" href="{{ url_for('inicio') }}">
+            Floripa Urbana
+        </a>
+        <nav>
+            <a href="{{ url_for('mapa') }}">
+                Mapa
+            </a>
+            <a href="{{ url_for('inicio') }}">
+                Início
+            </a>
+        </nav>
+    </header>
+    <main class="secao detalhe">{% if ponto %}
+        <p class="sobretitulo">
+            Ponto turístico
+        </p>
+        <h1>
+            {{ ponto.nome }}
+        </h1>
+        {% if ponto.imagem %}
+        <img class="imagem-detalhe" src="{{ url_for('static', filename='imagens/' ~ ponto.imagem) }}" alt="{{ ponto.nome }}">{% endif %}
+        <p>
+            {{ ponto.descricao }}
+        </p>
+        <p class="coordenadas">{{ ponto.latitude }}, {{ ponto.longitude }}
+        </p>
+        <a href="{{ url_for('mapa') }}">
+            ← Voltar ao mapa
+        </a>
+        {% else %}
+        <h1>
+            Ponto não encontrado
+        </h1>
+        <p>
+            Este lugar não está cadastrado.
+        </p>
+        <a href="{{ url_for('mapa') }}">
+            Voltar ao mapa
+        </a>
+        {% endif %}
+    </main>
+    <footer>
+        Floripa Urbana
+    </footer>
+</body>
+</html>

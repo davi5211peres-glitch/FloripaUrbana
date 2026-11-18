@@ -1,3 +1,63 @@
 <!doctype html>
-<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Cadastrar | Floripa Urbana</title><link rel="stylesheet" href="{{ url_for('static', filename='estilo.css') }}"></head>
-<body><header class="topo"><a class="marca" href="{{ url_for('inicio') }}">Floripa Urbana</a><nav><a href="{{ url_for('mapa') }}">Mapa</a><a href="{{ url_for('entrar') }}">Entrar</a></nav></header><main class="secao conta"><p class="sobretitulo">Faça parte</p><h1>Crie sua conta</h1>{% with mensagens = get_flashed_messages(with_categories=true) %}{% for categoria, mensagem in mensagens %}<p class="mensagem {{ categoria }}">{{ mensagem }}</p>{% endfor %}{% endwith %}<form class="formulario" action="{{ url_for('cadastro') }}" method="post"><label>Nome<input type="text" name="nome" autocomplete="name" required></label><label>E-mail<input type="email" name="email" autocomplete="email" required></label><label>Senha<input type="password" name="senha" autocomplete="new-password" required></label><button class="botao" type="submit">Cadastrar</button><p>Já tem conta? <a href="{{ url_for('entrar') }}">Entrar</a></p></form></main><footer>Floripa Urbana</footer></body></html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>
+        Cadastrar | Floripa Urbana
+    </title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='estilo.css') }}">
+</head>
+<body>
+    <header class="topo">
+        <a class="marca" href="{{ url_for('inicio') }}">
+            Floripa Urbana
+        </a>
+            <nav>
+                <a href="{{ url_for('mapa') }}">
+                    Mapa
+                </a>
+                <a href="{{ url_for('entrar') }}">
+                    Entrar
+                </a>
+            </nav>
+            </header>
+            <main class="secao conta">
+                <p class="sobretitulo">
+                    Faça parte
+                </p>
+                <h1>
+                    Crie sua conta
+                </h1>
+                {% with mensagens = get_flashed_messages(with_categories=true) %}{% for categoria, mensagem in mensagens %}
+                <p class="mensagem {{ categoria }}">{{ mensagem }}
+                </p>{
+                    % endfor %}{% endwith %}
+                    <form class="formulario" action="{{ url_for('cadastro') }}" method="post">
+                        <label>
+                            Nome
+                            <input type="text" name="nome" autocomplete="name" required>
+                        </label>
+                        <label>
+                            E-mail
+                            <input type="email" name="email" autocomplete="email" required></label>
+                            <label>
+                                Senha
+                                <input type="password" name="senha" autocomplete="new-password" required>
+                            </label>
+                            <button class="botao" type="submit">
+                                Cadastrar
+                            </button>
+                            <p>
+                                Já tem conta? 
+                                <a href="{{ url_for('entrar') }}">
+                                    Entrar
+                                </a>
+                            </p>
+                        </form>
+                    </main>
+                    <footer>
+                        Floripa Urbana
+                    </footer>
+</body>
+</html>

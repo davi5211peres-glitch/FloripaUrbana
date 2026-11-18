@@ -1,3 +1,40 @@
 <!doctype html>
-<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Sobre | Floripa Urbana</title><link rel="stylesheet" href="{{ url_for('static', filename='estilo.css') }}"></head>
-<body><header class="topo"><a class="marca" href="{{ url_for('inicio') }}">Floripa Urbana</a><nav><a href="{{ url_for('inicio') }}">Início</a><a href="{{ url_for('mapa') }}">Mapa</a></nav></header><main class="secao sobre"><p class="sobretitulo">Sobre o projeto</p><h1>Uma cidade feita de lugares e histórias.</h1><p>O Floripa Urbana é um guia digital para moradores e visitantes descobrirem pontos turísticos e culturais de Florianópolis.</p></main><footer>Floripa Urbana · Florianópolis, Santa Catarina</footer></body></html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>
+        Sobre | Floripa Urbana
+    </title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='estilo.css') }}">
+</head>
+<body>
+    <header class="topo">
+        <a class="marca" href="{{ url_for('inicio') }}">
+            Floripa Urbana
+        </a>
+        <nav>
+            <a href="{{ url_for('inicio') }}">
+                Início
+            </a>
+            <a href="{{ url_for('mapa') }}">
+                Mapa
+            </a>
+        </nav>
+    </header>
+    <main class="secao sobre">
+        <p class="sobretitulo">
+            Sobre o projeto
+        </p>
+        <h1>
+            Uma cidade feita de lugares e histórias.
+        </h1>
+        <p>
+            O Floripa Urbana é um guia digital para moradores e visitantes descobrirem pontos turísticos e culturais de Florianópolis.
+        </p>
+    </main>
+    <footer>
+        Floripa Urbana · Florianópolis, Santa Catarina
+    </footer>
+</body>
+</html>
