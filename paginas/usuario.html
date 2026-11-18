@@ -1,3 +1,63 @@
 <!doctype html>
-<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Minha conta | Floripa Urbana</title><link rel="stylesheet" href="{{ url_for('static', filename='estilo.css') }}"></head>
-<body><header class="topo"><a class="marca" href="{{ url_for('inicio') }}">Floripa Urbana</a><nav><a href="{{ url_for('mapa') }}">Mapa</a><a href="{{ url_for('inicio') }}">Início</a><a href="{{ url_for('sair') }}">Sair</a></nav></header><main class="secao conta"><p class="sobretitulo">Área pessoal</p><h1>Minha conta</h1><section class="perfil"><h2>Olá, {{ conta.nome }}</h2><p><strong>Nome:</strong> {{ conta.nome }}</p><p><strong>E-mail:</strong> {{ conta.email }}</p><p><strong>Cadastro em:</strong> {{ conta.criado_em.strftime('%d/%m/%Y') if conta.criado_em else '—' }}</p></section></main><footer>Floripa Urbana</footer></body></html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>
+        Minha conta | Floripa Urbana
+    </title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='estilo.css') }}">
+</head>
+<body>
+    <header class="topo">
+        <a class="marca" href="{{ url_for('inicio') }}">
+            Floripa Urbana
+        </a>
+        <nav>
+            <a href="{{ url_for('mapa') }}">
+                Mapa
+            </a>
+            <a href="{{ url_for('inicio') }}">
+                Início
+            </a>
+            <a href="{{ url_for('sair') }}">
+                Sair
+            </a>
+        </nav>
+    </header>
+    <main class="secao conta">
+        <p class="sobretitulo">
+            Área pessoal
+        </p>
+        <h1>
+            Minha conta
+        </h1>
+        <section class="perfil">
+            <h2>
+                Olá, {{ conta.nome }}
+            </h2>
+            <p>
+                <strong>
+                    Nome:
+                </strong>
+                 {{ conta.nome }}
+            </p>
+            <p>
+                <strong>
+                    E-mail:
+                </strong>
+                 {{ conta.email }}
+                </p>
+                <p>
+                    <strong>
+                        Cadastro em:
+                    </strong>
+                     {{ conta.criado_em.strftime('%d/%m/%Y') if conta.criado_em else '—' }}
+                    </p>
+                </section>
+            </main>
+            <footer>
+                Floripa Urbana
+            </footer>
+</body>
+</html>
