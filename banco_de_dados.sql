@@ -19,6 +19,19 @@ CREATE TABLE IF NOT EXISTS pontos_turisticos (
   imagem VARCHAR(255),
   criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE IF NOT EXISTS avaliacoes_locais (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  local_id INT NOT NULL,
+  usuario_id INT NOT NULL,
+  nome VARCHAR(120) NOT NULL,
+  nota TINYINT NOT NULL,
+  comentario TEXT NOT NULL,
+  criada_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  INDEX idx_avaliacoes_local (local_id),
+  CONSTRAINT fk_avaliacoes_usuario FOREIGN KEY (usuario_id)
+    REFERENCES usuarios(id) ON DELETE CASCADE
+);
  
 INSERT INTO pontos_turisticos (nome, descricao, latitude, longitude)
 SELECT 'Mercado Público de Florianópolis', 'Espaço histórico e cultural no centro da cidade.', -27.5978, -48.5495

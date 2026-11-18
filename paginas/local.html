@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% if local %}{{ local.nome }}{% else %}Local n&atilde;o encontrado{% endif %} | Floripa Urbana</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='estilo.css') }}">
+  <style>
+    .local-pagina{max-width:900px}.local-bloco{background:#fff;border:1px solid #e0d7cf;border-radius:14px;padding:24px;margin:22px 0}.local-acoes{display:flex;gap:12px;flex-wrap:wrap;margin:22px 0}.local-acoes .botao{margin:0}.botao-secundario{background:#548c92}.local-coordenadas{font-size:14px;color:#61736a}.avaliacao{border-top:1px solid #e0d7cf;padding:16px 0}.avaliacao:first-of-type{border-top:0}.estrelas{color:#b0782e;letter-spacing:2px}.avaliacao-form select,.avaliacao-form textarea,.avaliacao-form input{display:block;width:100%;padding:12px;margin:7px 0 14px;border:1px solid #e0d7cf;border-radius:7px;font:inherit}.avaliacao-form textarea{min-height:110px;resize:vertical}.nota-media{font-size:20px;color:#285260;font-weight:700}
+  </style>
+</head>
+<body>
+  <header class="topo"><a class="marca" href="{{ url_for('inicio') }}">Floripa Urbana</a><nav><a href="{{ url_for('mapa') }}">Mapa</a><a href="{{ url_for('inicio') }}">In&iacute;cio</a></nav></header>
+  <main class="secao detalhe local-pagina">
+    {% if local %}
+      <p class="sobretitulo">Guia de Florian&oacute;polis</p>
+      <h1>{{ local.nome }}</h1>
+      <section class="local-bloco">
+        <h2>Sobre o lugar</h2>
+        <p>{{ local.descricao }}</p>
+        <p><strong>Endere&ccedil;o:</strong> {{ local.endereco }}</p>
+        <p class="local-coordenadas"><strong>Localiza&ccedil;&atilde;o:</strong> {{ local.latitude }}, {{ local.longitude }}</p>
+        <div class="local-acoes">
+          <a class="botao" href="{{ rota }}" target="_blank" rel="noopener">Abrir rota no Google Maps</a>
+          <a class="botao botao-secundario" href="{{ url_for('mapa') }}">Voltar ao mapa</a>
+        </div>
+      </section>
+
+      <section class="local-bloco" id="avaliacoes">
+        <h2>Avalia&ccedil;&otilde;es</h2>
+        {% if avaliacoes %}
+          <p class="nota-media">{{ media }} / 5 <span class="estrelas">{% for n in range(5) %}{% if n < media|round(0, 'floor')|int %}&#9733;{% else %}&#9734;{% endif %}{% endfor %}</span></p>
+          <p>{{ avaliacoes|length }} avalia&ccedil;&atilde;o(&otilde;es)</p>
+          {% for avaliacao in avaliacoes %}
+            <article class="avaliacao">
+              <strong>{{ avaliacao.nome }}</strong>
+              <div class="estrelas">{% for n in range(5) %}{% if n < avaliacao.nota %}&#9733;{% else %}&#9734;{% endif %}{% endfor %}</div>
+              <p>{{ avaliacao.comentario }}</p>
+              <small>{{ avaliacao.criada_em }}</small>
+            </article>
+          {% endfor %}
+        {% else %}
+          <p>Ainda n&atilde;o h&aacute; avalia&ccedil;&otilde;es. Seja a primeira pessoa a avaliar!</p>
+        {% endif %}
+      </section>
+
+      <section class="local-bloco">
+        <h2>Deixe sua avalia&ccedil;&atilde;o</h2>
+        {% with mensagens = get_flashed_messages(with_categories=true) %}{% for categoria, mensagem in mensagens %}<p class="mensagem {{ categoria }}">{{ mensagem }}</p>{% endfor %}{% endwith %}
+        {% if session.get('usuario_id') %}
+          <p>Avalia&ccedil;&atilde;o como <strong>{{ session.get('usuario_nome') }}</strong></p>
+          <form class="avaliacao-form" method="post">
+          <label for="nota">Sua nota</label>
+          <select id="nota" name="nota" required>
+            <option value="">Escolha de 1 a 5 estrelas</option>
+            <option value="5">5 - Excelente</option><option value="4">4 - Muito bom</option><option value="3">3 - Bom</option><option value="2">2 - Regular</option><option value="1">1 - Ruim</option>
+          </select>
+          <label for="comentario">Coment&aacute;rio</label>
+          <textarea id="comentario" name="comentario" maxlength="2000" required placeholder="Conte como foi sua visita"></textarea>
+          <button class="botao" type="submit">Enviar avalia&ccedil;&atilde;o</button>
+          </form>
+        {% else %}
+          <p>Entre na sua conta para publicar uma avalia&ccedil;&atilde;o. As avalia&ccedil;&otilde;es publicadas s&atilde;o vis&iacute;veis para todos.</p>
+          <div class="local-acoes"><a class="botao" href="{{ url_for('entrar', next=url_for('detalhe_local', local_id=local_id) + '#avaliacoes') }}">Entrar</a><a class="botao botao-secundario" href="{{ url_for('cadastro', next=url_for('detalhe_local', local_id=local_id) + '#avaliacoes') }}">Cadastrar</a></div>
+        {% endif %}
+      </section>
+    {% else %}
+      <h1>Local n&atilde;o encontrado</h1><p>Esse local n&atilde;o est&aacute; cadastrado.</p><a href="{{ url_for('mapa') }}">Voltar ao mapa</a>
+    {% endif %}
+  </main>
+  <footer>Floripa Urbana &middot; Florian&oacute;polis, Santa Catarina</footer>
+</body>
+</html>
