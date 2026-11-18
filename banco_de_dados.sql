@@ -32,11 +32,4 @@ CREATE TABLE IF NOT EXISTS avaliacoes_locais (
   CONSTRAINT fk_avaliacoes_usuario FOREIGN KEY (usuario_id)
     REFERENCES usuarios(id) ON DELETE CASCADE
 );
- 
-INSERT INTO pontos_turisticos (nome, descricao, latitude, longitude)
-SELECT 'Mercado Público de Florianópolis', 'Espaço histórico e cultural no centro da cidade.', -27.5978, -48.5495
-WHERE NOT EXISTS (SELECT 1 FROM pontos_turisticos WHERE nome = 'Mercado Público de Florianópolis');
- 
-INSERT INTO pontos_turisticos (nome, descricao, latitude, longitude)
-SELECT 'Ponte Hercílio Luz', 'Um dos principais cartões-postais de Florianópolis.', -27.5927, -48.5661
-WHERE NOT EXISTS (SELECT 1 FROM pontos_turisticos WHERE nome = 'Ponte Hercílio Luz');
+
