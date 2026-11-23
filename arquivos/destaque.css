@@ -15,8 +15,11 @@
 }
 
 .hero::before {
+  width: 119.0.5rem;
+  height: 38rem;     
+  object-fit: fill;
   z-index: -2;
-  background: url('/static/imagens/ponte-hercilio-luz.jpg') center 52% / cover;
+  background: url('/static/imagens/foto.jpg') center 12% / cover;
   filter: saturate(1.16) contrast(1.08);
 }
 
