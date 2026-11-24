@@ -34,7 +34,7 @@ a:hover {
   color:white
 }
 .marca {
-  font:800 20px Manrope,sans-serif;
+  font:800 30px Manrope,sans-serif;
   color:white
 }
 .topo nav {
@@ -44,7 +44,8 @@ a:hover {
   font-size:14px
 }
 .topo nav a {
-  color:white
+  color:white;
+  font-size:18px;
 }
 .topo nav .saudacao {
   background:var(--medio);
@@ -149,7 +150,7 @@ a:hover {
   line-height:1.6
 }
 .cartao a {
-  font-size:14px;
+  font-size:18px;
   font-weight:600
 }
 .conta {

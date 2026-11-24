@@ -10,7 +10,7 @@ app.secret_key = "chave-local-floripa-urbana"
  
  
 def conectar_banco():
-    """Abre a conexÃ£o com o MySQL usando as configuraÃ§Ãµes de config.py."""
+    """Abre a conexão com o MySQL usando as configuraçoes de config.py."""
     return mysql.connector.connect(**MYSQL_CONFIG)
  
  
@@ -37,7 +37,7 @@ def inicio():
             retornar=True,
         )
     except Error as erro:
-        app.logger.warning("NÃ£o foi possÃ­vel carregar os pontos: %s", erro)
+        app.logger.warning("Não foi possi­vel carregar os pontos: %s", erro)
         pontos = []
     return render_template("inicio.html", pontos=pontos)
  
@@ -72,7 +72,7 @@ def cadastro():
                 return redirect(url_for("entrar", next=request.form.get("next", "")))
             except Error as erro:
                 app.logger.warning("Falha no cadastro: %s", erro)
-                flash("NÃ£o foi possÃ­vel concluir o cadastro. Verifique se o e-mail jÃ¡ estÃ¡ cadastrado.", "erro")
+                flash("Não foi possi­vel concluir o cadastro. Verifique se o e-mail ja está cadastrado.", "erro")
     return render_template("cadastro.html", next=request.args.get("next", ""))
  
  

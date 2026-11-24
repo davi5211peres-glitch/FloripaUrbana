@@ -100,7 +100,7 @@ def montar_mapa():
             f'<a href="{escape(rota)}" target="_blank" rel="noopener" '
             'style="display:inline-block;margin:8px 0 0;padding:7px 10px;background:#548C92;color:white;border-radius:5px;text-decoration:none">'
             'Abrir rota</a>',
-            max_width=340,
+            max_width=3400,
         )
         folium.Marker(
             [local["latitude"], local["longitude"]],
