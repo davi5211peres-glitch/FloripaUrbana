@@ -35,7 +35,7 @@ a:hover {
 }
 .marca {
   font:800 30px Manrope,sans-serif;
-  color:white
+  color:white;
 }
 .topo nav {
   display:flex;
@@ -58,7 +58,7 @@ a:hover {
   align-items:center;
   padding:72px max(calc((100vw - 1250px)/2),24px);
   background:linear-gradient(90deg,rgba(24,59,70,.92),rgba(24,59,70,.45) 58%,rgba(24,59,70,.06)),url('/static/imagens/ponte-hercilio-luz.jpg') center 52%/cover;
-  color:white
+  color:rgb(255, 255, 255)
 }
 .hero-conteudo {
   max-width:550px
