@@ -34,8 +34,8 @@ a:hover {
   color:white
 }
 .marca {
-  font:800 20px Manrope,sans-serif;
-  color:white
+  font:800 30px Manrope,sans-serif;
+  color:white;
 }
 .topo nav {
   display:flex;
@@ -44,7 +44,8 @@ a:hover {
   font-size:14px
 }
 .topo nav a {
-  color:white
+  color:white;
+  font-size:18px;
 }
 .topo nav .saudacao {
   background:var(--medio);
@@ -57,7 +58,7 @@ a:hover {
   align-items:center;
   padding:72px max(calc((100vw - 1250px)/2),24px);
   background:linear-gradient(90deg,rgba(24,59,70,.92),rgba(24,59,70,.45) 58%,rgba(24,59,70,.06)),url('/static/imagens/ponte-hercilio-luz.jpg') center 52%/cover;
-  color:white
+  color:rgb(255, 255, 255)
 }
 .hero-conteudo {
   max-width:550px
@@ -149,7 +150,7 @@ a:hover {
   line-height:1.6
 }
 .cartao a {
-  font-size:14px;
+  font-size:18px;
   font-weight:600
 }
 .conta {
