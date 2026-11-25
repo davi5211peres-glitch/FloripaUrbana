@@ -37,6 +37,13 @@
               <div class="estrelas">{% for n in range(5) %}{% if n < avaliacao.nota %}&#9733;{% else %}&#9734;{% endif %}{% endfor %}</div>
               <p>{{ avaliacao.comentario }}</p>
               <small>{{ avaliacao.criada_em }}</small>
+              {% if is_admin %}
+                <form method="post" onsubmit="return confirm('Excluir esta avaliação e comentário deste local?')">
+                  <input type="hidden" name="acao" value="excluir_avaliacao">
+                  <input type="hidden" name="avaliacao_id" value="{{ avaliacao.id }}">
+                  <button class="botao" type="submit">Excluir avaliação e comentário</button>
+                </form>
+              {% endif %}
             </article>
           {% endfor %}
         {% else %}
