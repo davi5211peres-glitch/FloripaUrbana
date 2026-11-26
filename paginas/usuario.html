@@ -5,14 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Minha conta | Floripa Urbana</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='estilo.css') }}">
+  <style>
+    .conta{max-width:1100px}.perfil{width:100%;max-width:1100px;padding:36px}.perfil h2{margin:0 0 24px;color:#285260;font:700 25px Manrope,sans-serif}.perfil-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.perfil-dado{min-height:94px;padding:18px;background:#f8f6f3;border:1px solid #e0d7cf;border-radius:10px}.perfil-dado strong{display:block;margin-bottom:9px;color:#548c92;font-size:13px;text-transform:uppercase;letter-spacing:.06em}.perfil-dado span{font-size:17px;overflow-wrap:anywhere}@media(max-width:600px){.perfil{padding:22px}.perfil-grid{grid-template-columns:1fr}}
+  </style>
 </head>
 <body>
   <header class="topo">
     <a class="marca" href="{{ url_for('inicio') }}">Floripa Urbana</a>
     <nav>
-      <a href="{{ url_for('mapa') }}">Mapa</a>
       <a href="{{ url_for('inicio') }}">In&iacute;cio</a>
-      <a href="{{ url_for('sair') }}">Sair</a>
     </nav>
   </header>
   <main class="secao conta">
@@ -20,9 +21,15 @@
     <h1>Minha conta</h1>
     <section class="perfil">
       <h2>Ol&aacute;, {{ conta.nome }}</h2>
-      <p><strong>Nome:</strong> {{ conta.nome }}</p>
-      <p><strong>E-mail:</strong> {{ email_mascarado }}</p>
-      <p><strong>Cadastro em:</strong> {% if conta.criado_em %}{{ conta.criado_em.strftime('%d/%m/%Y') }}{% else %}&mdash;{% endif %}</p>
+      <div class="perfil-grid">
+        <div class="perfil-dado"><strong>Nome</strong><span>{{ conta.nome }}</span></div>
+        <div class="perfil-dado"><strong>E-mail protegido</strong><span>{{ email_mascarado }}</span></div>
+        <div class="perfil-dado"><strong>Tipo de conta</strong><span>{% if is_admin %}Administrador{% else %}Usu&aacute;rio{% endif %}</span></div>
+        <div class="perfil-dado"><strong>Avalia&ccedil;&otilde;es publicadas</strong><span>{{ total_avaliacoes }}</span></div>
+        <div class="perfil-dado"><strong>N&uacute;mero da conta</strong><span>#{{ conta.id }}</span></div>
+        <div class="perfil-dado"><strong>Cadastro em</strong><span>{% if conta.criado_em %}{{ conta.criado_em.strftime('%d/%m/%Y') }}{% else %}&mdash;{% endif %}</span></div>
+      </div>
+      <a class="botao" href="{{ url_for('sair') }}">Sair da conta</a>
     </section>
   </main>
   <footer>Floripa Urbana</footer>

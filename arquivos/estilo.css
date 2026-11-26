@@ -47,11 +47,50 @@ a:hover {
   color:white;
   font-size:18px;
 }
-.topo nav .saudacao {
-  background:var(--medio);
-  padding:10px 14px;
-  border-radius:22px
+.busca-topo {
+  position:relative;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  flex:1;
+  max-width:460px;
+  margin:0 24px
 }
+.busca-topo input {
+  width:100%;
+  min-width:120px;
+  padding:10px 12px;
+  border:1px solid #dce5df;
+  border-radius:8px;
+  font:inherit
+}
+.busca-topo button {
+  padding:10px 14px;
+  border:0;
+  border-radius:8px;
+  background:var(--medio);
+  color:white;
+  font:inherit;
+  cursor:pointer
+}
+.sugestoes-busca {
+  position:absolute;
+  z-index:20;
+  top:calc(100% + 4px);
+  left:0;
+  right:0;
+  display:none;
+  margin:0;
+  padding:4px;
+  list-style:none;
+  background:white;
+  border:1px solid #dce5df;
+  border-radius:8px;
+  box-shadow:0 8px 24px #19394322
+}
+.sugestoes-busca.aberta {display:block}
+.sugestoes-busca a {display:block;padding:9px 12px;color:#193943;border-radius:5px}
+.sugestoes-busca a:hover,.sugestoes-busca a:focus {background:#edf4f2;text-decoration:none}
 .hero {
   min-height:440px;
   display:flex;
@@ -68,7 +107,7 @@ a:hover {
   text-transform:uppercase;
   letter-spacing:.12em;
   font-size:12px;
-  font-weight:7000
+  font-weight:700
 }
 .hero .sobretitulo {
   color:var(--claro)
@@ -230,13 +269,19 @@ footer {
   border-top:1px solid var(--areia);
   padding:25px;
   color:#718178;
-  font-size:13px
+  font-size:16px
 }
 @media(max-width:650px) {
   .topo {
     padding:14px 18px;
     gap:12px;
     flex-wrap:wrap
+  }
+  .busca-topo {
+    order:3;
+    flex-basis:100%;
+    max-width:none;
+    margin:8px 0
   }
   .topo nav {
     gap:12px;

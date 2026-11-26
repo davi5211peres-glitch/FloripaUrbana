@@ -1,7 +1,8 @@
-from flask import Flask, render_template, request, redirect, url_for, flash, session
+from flask import Flask, render_template, request, redirect, url_for, flash, session, jsonify
 import mysql.connector
 from mysql.connector import Error
 from werkzeug.security import check_password_hash, generate_password_hash
+import unicodedata
 from config import MYSQL_CONFIG
 from mapa import LOCAIS, montar_mapa
  
@@ -63,6 +64,38 @@ def exigir_admin():
         flash("Acesso permitido somente para administradores.", "erro")
         return None
     return usuario
+
+
+def buscar_lugares(termo):
+    """Busca pontos do banco e locais fixos do mapa pelo nome."""
+    termo = termo.strip()
+    resultados = []
+    if not termo:
+        return resultados
+    try:
+        pontos = consultar(
+            "SELECT id, nome FROM pontos_turisticos WHERE nome LIKE %s ORDER BY nome LIMIT 8",
+            (f"%{termo}%",), retornar=True,
+        )
+        resultados.extend({"nome": ponto["nome"], "url": url_for("detalhe_ponto", ponto_id=ponto["id"])} for ponto in pontos)
+    except Error as erro:
+        app.logger.warning("Falha na busca de pontos: %s", erro)
+
+    termo_normalizado = "".join(
+        caractere for caractere in unicodedata.normalize("NFKD", termo.casefold())
+        if not unicodedata.combining(caractere)
+    )
+    nomes_existentes = {item["nome"].casefold() for item in resultados}
+    for indice, local in enumerate(LOCAIS, start=1):
+        nome = local["nome"]
+        nome_normalizado = "".join(
+            caractere for caractere in unicodedata.normalize("NFKD", nome.casefold())
+            if not unicodedata.combining(caractere)
+        )
+        if termo_normalizado in nome_normalizado and nome.casefold() not in nomes_existentes:
+            resultados.append({"nome": nome, "url": url_for("detalhe_local", local_id=indice)})
+            nomes_existentes.add(nome.casefold())
+    return resultados[:10]
  
  
 @app.route("/")
@@ -77,6 +110,23 @@ def inicio():
         pontos = []
     usuario = usuario_atual() if session.get("usuario_id") else None
     return render_template("inicio.html", pontos=pontos, is_admin=bool(usuario and usuario["is_admin"]))
+
+
+@app.route("/api/buscar")
+def api_buscar():
+    termo = request.args.get("q", "")[:100]
+    return jsonify(buscar_lugares(termo))
+
+
+@app.route("/buscar")
+def buscar():
+    termo = request.args.get("q", "").strip()[:100]
+    if len(termo) < 2:
+        flash("Digite o nome de um lugar para pesquisar.", "erro")
+        return redirect(url_for("inicio"))
+    resultados = buscar_lugares(termo)
+    usuario = usuario_atual() if session.get("usuario_id") else None
+    return render_template("busca.html", termo=termo, resultados=resultados, is_admin=bool(usuario and usuario["is_admin"]))
  
  
 @app.route("/usuario", methods=["GET"])
@@ -95,8 +145,19 @@ def usuario():
     if not atual:
         return redirect(url_for("entrar"))
     email = contas[0]["email"]
-    email_mascarado = email[:3] + "#" * max(0, len(email) - 3)
-    return render_template("usuario.html", conta=contas[0], email_mascarado=email_mascarado, is_admin=bool(atual["is_admin"]))
+    prefixo_email = email.split("@", 1)[0]
+    email_mascarado = prefixo_email[:3] + "#" * max(4, len(prefixo_email) - 3)
+    try:
+        total_avaliacoes = consultar(
+            "SELECT COUNT(*) AS total FROM avaliacoes_locais WHERE usuario_id = %s",
+            (atual["id"],), retornar=True,
+        )[0]["total"]
+    except Error:
+        total_avaliacoes = 0
+    return render_template(
+        "usuario.html", conta=contas[0], email_mascarado=email_mascarado,
+        is_admin=bool(atual["is_admin"]), total_avaliacoes=total_avaliacoes,
+    )
  
  
 @app.route("/cadastro", methods=["GET", "POST"])
@@ -270,7 +331,7 @@ def admin():
     if not exigir_admin():
         return redirect(url_for("inicio"))
     aba = request.args.get("aba", "pontos")
-    if aba not in {"pontos", "comentarios", "avaliacoes", "usuarios"}:
+    if aba not in {"pontos", "comentarios", "usuarios"}:
         aba = "pontos"
     if request.method == "POST":
         acao = request.form.get("acao", "")
@@ -315,7 +376,7 @@ def admin():
             pontos = consultar("SELECT id, nome, latitude, longitude FROM pontos_turisticos ORDER BY nome", retornar=True)
         else:
             pontos = []
-        if aba in {"comentarios", "avaliacoes"}:
+        if aba == "comentarios":
             avaliacoes = consultar("SELECT a.local_id, a.nome, a.nota, a.comentario, a.criada_em FROM avaliacoes_locais a ORDER BY a.local_id, a.criada_em DESC", retornar=True)
         else:
             avaliacoes = []

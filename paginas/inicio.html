@@ -10,32 +10,33 @@
 <body>
   <header class="topo">
     <a class="marca" href="{{ url_for('inicio') }}">Floripa Urbana</a>
+    {% include '_busca.html' %}
     <nav>
-      <a href="{{ url_for('mapa') }}">Mapa</a>
       <a href="{{ url_for('outras') }}">Sobre</a>
-      {% if is_admin %}<a class="saudacao" href="{{ url_for('admin') }}">Administra&ccedil;&atilde;o</a>{% endif %}
+      {% if is_admin %}<a href="{{ url_for('admin') }}">Administra&ccedil;&atilde;o</a>{% endif %}
       {% if session.get('usuario_nome') %}
-      <a class="saudacao" href="{{ url_for('usuario') }}">Ol&aacute;, {{ session.get('usuario_nome') }}</a>
-      <a href="{{ url_for('sair') }}">Sair</a>
+      <a href="{{ url_for('usuario') }}">Ol&aacute;, {{ session.get('usuario_nome') }}</a>
       {% else %}
       <a href="{{ url_for('entrar') }}">Entrar</a>
       <a href="{{ url_for('cadastro') }}">Cadastrar</a>
       {% endif %}
     </nav>
   </header>
+  {% with mensagens = get_flashed_messages(with_categories=true) %}
+    {% for categoria, mensagem in mensagens %}<p class="mensagem {{ categoria }}" role="alert" style="max-width:1200px;margin:14px auto;padding-left:24px;padding-right:24px">{{ mensagem }}</p>{% endfor %}
+  {% endwith %}
   <main>
     <section class="hero">
       <div class="hero-conteudo">
         <p class="sobretitulo">Explore a Ilha da Magia</p>
         <h1>Conhe&ccedil;a Florian&oacute;polis<br>de um novo jeito.</h1>
         <p>Descubra lugares, hist&oacute;rias e experi&ecirc;ncias que fazem parte da vida da cidade.</p>
-        <a class="botao" href="{{ url_for('mapa') }}">Explorar a regi&atilde;o</a>
       </div>
     </section>
     <section class="secao">
       <div class="cabecalho-secao">
         <div><p class="sobretitulo">Descobertas locais</p><h2>Pontos tur&iacute;sticos</h2></div>
-        <a href="{{ url_for('mapa') }}">Ver mapa completo &rarr;</a>
+        <a href="{{ url_for('mapa') }}">Ir para mapa &rarr;</a>
       </div>
       {% if pontos %}
       <div class="grade">

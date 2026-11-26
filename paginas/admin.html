@@ -3,56 +3,52 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Administração | Floripa Urbana</title>
+  <title>Administra&ccedil;&atilde;o | Floripa Urbana</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='estilo.css') }}">
   <style>
     .admin-abas{display:flex;flex-wrap:wrap;gap:8px;margin:24px 0}.admin-abas a{padding:11px 16px;border-radius:8px;background:#e7e1db;color:#285260;font-weight:600}.admin-abas a.ativa{background:#285260;color:#fff}.admin-card{background:#fff;border:1px solid #e0d7cf;border-radius:14px;padding:22px;margin:18px 0}.admin-card h2{margin-top:0;color:#285260}.admin-card input,.admin-card textarea{display:block;width:100%;padding:11px;margin:8px 0 14px;border:1px solid #e0d7cf;border-radius:7px;font:inherit}.admin-card textarea{min-height:90px}.admin-list{list-style:none;padding:0}.admin-list li{border-top:1px solid #e0d7cf;padding:14px 0}.admin-list p{white-space:pre-wrap;overflow-wrap:anywhere}.botao-perigo{background:#a44432;padding:8px 12px;margin:4px}.botao-pequeno{padding:8px 12px;margin:4px}.historico-local{border-top:1px solid #e0d7cf;padding:14px 0}.historico-local p{white-space:pre-wrap;overflow-wrap:anywhere}
   </style>
 </head>
 <body>
-  <header class="topo"><a class="marca" href="{{ url_for('inicio') }}">Floripa Urbana</a><nav><a href="{{ url_for('inicio') }}">Início</a><a href="{{ url_for('usuario') }}">Minha conta</a><a href="{{ url_for('sair') }}">Sair</a></nav></header>
+  <header class="topo"><a class="marca" href="{{ url_for('inicio') }}">Floripa Urbana</a><nav><a href="{{ url_for('inicio') }}">In&iacute;cio</a><a href="{{ url_for('usuario') }}">Minha conta</a></nav></header>
   <main class="secao">
-    <p class="sobretitulo">Painel de controle</p><h1>Administração</h1>
+    <p class="sobretitulo">Painel de controle</p><h1>Administra&ccedil;&atilde;o</h1>
     {% with mensagens = get_flashed_messages(with_categories=true) %}{% for categoria, mensagem in mensagens %}<p class="mensagem {{ categoria }}">{{ mensagem }}</p>{% endfor %}{% endwith %}
-    <nav class="admin-abas" aria-label="Seções de administração">
+    <nav class="admin-abas" aria-label="Se&ccedil;&otilde;es de administra&ccedil;&atilde;o">
       <a class="{% if aba == 'pontos' %}ativa{% endif %}" href="{{ url_for('admin', aba='pontos') }}">Pontos</a>
-      <a class="{% if aba == 'comentarios' %}ativa{% endif %}" href="{{ url_for('admin', aba='comentarios') }}">Histórico de comentários</a>
-      <a class="{% if aba == 'avaliacoes' %}ativa{% endif %}" href="{{ url_for('admin', aba='avaliacoes') }}">Histórico de avaliações</a>
+      <a class="{% if aba == 'comentarios' %}ativa{% endif %}" href="{{ url_for('admin', aba='comentarios') }}">Hist&oacute;rico de coment&aacute;rios</a>
       <a class="{% if aba == 'usuarios' %}ativa{% endif %}" href="{{ url_for('admin', aba='usuarios') }}">Contas</a>
     </nav>
     {% if aba == 'pontos' %}
       <section class="admin-card"><h2>Cadastrar ponto</h2>
         <form method="post"><input type="hidden" name="acao" value="criar_ponto">
           <label>Nome<input name="nome" maxlength="150" required></label>
-          <label>Descrição<textarea name="descricao" required></textarea></label>
+          <label>Descri&ccedil;&atilde;o<textarea name="descricao" required></textarea></label>
           <label>Latitude<input name="latitude" type="number" step="any" min="-90" max="90" required></label>
           <label>Longitude<input name="longitude" type="number" step="any" min="-180" max="180" required></label>
           <label>Arquivo de imagem (opcional)<input name="imagem" maxlength="255" placeholder="imagem.jpg"></label>
           <button class="botao" type="submit">Cadastrar ponto</button>
         </form>
       </section>
-      <section class="admin-card"><h2>Pontos cadastrados ({{ pontos|length }})</h2><ul class="admin-list">
-        {% for ponto in pontos %}<li><strong>{{ ponto.nome }}</strong><br><small>{{ ponto.latitude }}, {{ ponto.longitude }}</small><form method="post" onsubmit="return confirm('Excluir este ponto?')"><input type="hidden" name="acao" value="excluir_ponto"><input type="hidden" name="id" value="{{ ponto.id }}"><button class="botao botao-perigo" type="submit">Excluir ponto</button></form></li>{% else %}<li>Nenhum ponto cadastrado.</li>{% endfor %}
+      <section class="admin-card"><h2>Pontos exibidos no mapa ({{ locais|length }})</h2><ul class="admin-list">
+        {% for local in locais %}<li><strong>{{ local.nome }}</strong><br><small>Local do mapa</small><br><a class="botao botao-pequeno" href="{{ url_for('detalhe_local', local_id=loop.index) }}">Abrir local</a></li>{% else %}<li>Nenhum local no mapa.</li>{% endfor %}
+      </ul></section>
+      <section class="admin-card"><h2>Pontos adicionais cadastrados ({{ pontos|length }})</h2><ul class="admin-list">
+        {% for ponto in pontos %}<li><strong>{{ ponto.nome }}</strong><br><small>{{ ponto.latitude }}, {{ ponto.longitude }}</small><form method="post" onsubmit="return confirm('Excluir este ponto?')"><input type="hidden" name="acao" value="excluir_ponto"><input type="hidden" name="id" value="{{ ponto.id }}"><button class="botao botao-perigo" type="submit">Excluir ponto</button></form></li>{% else %}<li>Nenhum ponto adicional cadastrado.</li>{% endfor %}
       </ul></section>
     {% elif aba == 'comentarios' %}
-      <section class="admin-card"><h2>Histórico de comentários</h2>
+      <section class="admin-card"><h2>Hist&oacute;rico de coment&aacute;rios e avalia&ccedil;&otilde;es</h2>
         {% if avaliacoes %}
-        {% for local in locais %}{% set local_id = loop.index %}{% set itens = avaliacoes|selectattr('local_id', 'equalto', local_id)|list %}{% if itens %}<div class="historico-local"><h3>{{ local.nome }}</h3>{% for item in itens %}<p><strong>{{ item.nome }}</strong>: {{ item.comentario }}</p>{% endfor %}<a class="botao botao-pequeno" href="{{ url_for('detalhe_local', local_id=local_id) }}#avaliacoes">Abrir este local para moderar</a></div>{% endif %}{% else %}<p>Nenhum comentário cadastrado.</p>{% endfor %}
-        {% else %}<p>Nenhum comentário cadastrado.</p>{% endif %}
-      </section>
-    {% elif aba == 'avaliacoes' %}
-      <section class="admin-card"><h2>Histórico de avaliações</h2>
-        {% if avaliacoes %}
-        {% for local in locais %}{% set local_id = loop.index %}{% set itens = avaliacoes|selectattr('local_id', 'equalto', local_id)|list %}{% if itens %}<div class="historico-local"><h3>{{ local.nome }}</h3>{% for item in itens %}<p><strong>{{ item.nome }}</strong> · Nota {{ item.nota }}/5 · {{ item.criada_em }}</p>{% endfor %}<a class="botao botao-pequeno" href="{{ url_for('detalhe_local', local_id=local_id) }}#avaliacoes">Abrir este local para moderar</a></div>{% endif %}{% else %}<p>Nenhuma avaliação cadastrada.</p>{% endfor %}
-        {% else %}<p>Nenhuma avaliação cadastrada.</p>{% endif %}
+          {% for local in locais %}{% set local_id = loop.index %}{% set itens = avaliacoes|selectattr('local_id', 'equalto', local_id)|list %}{% if itens %}<div class="historico-local"><h3>{{ local.nome }}</h3>{% for item in itens %}<p><strong>{{ item.nome }}</strong> &middot; Nota {{ item.nota }}/5 &middot; {{ item.criada_em }}<br>{{ item.comentario }}</p>{% endfor %}<a class="botao botao-pequeno" href="{{ url_for('detalhe_local', local_id=local_id) }}#avaliacoes">Abrir local para moderar</a></div>{% endif %}{% endfor %}
+        {% else %}<p>Nenhum coment&aacute;rio ou avalia&ccedil;&atilde;o cadastrado.</p>{% endif %}
       </section>
     {% else %}
       <section class="admin-card"><h2>Contas</h2><ul class="admin-list">
-        {% for pessoa in usuarios %}<li><strong>{{ pessoa.nome }}</strong> · {{ pessoa.email }} · {% if pessoa.banido %}Banida{% else %}Ativa{% endif %}
+        {% for pessoa in usuarios %}<li><strong>{{ pessoa.nome }}</strong> &middot; {{ pessoa.email }} &middot; {% if pessoa.banido %}Banida{% else %}Ativa{% endif %}
           {% if pessoa.banido %}<form method="post"><input type="hidden" name="acao" value="desbanir_usuario"><input type="hidden" name="id" value="{{ pessoa.id }}"><button class="botao botao-pequeno" type="submit">Desbanir</button></form>{% else %}<form method="post" onsubmit="return confirm('Banir esta conta?')"><input type="hidden" name="acao" value="banir_usuario"><input type="hidden" name="id" value="{{ pessoa.id }}"><button class="botao botao-perigo" type="submit">Banir</button></form>{% endif %}
         </li>{% else %}<li>Nenhuma conta.</li>{% endfor %}
       </ul></section>
     {% endif %}
-  </main><footer>Floripa Urbana · Florianópolis, Santa Catarina</footer>
+  </main><footer>Floripa Urbana &middot; Florian&oacute;polis, Santa Catarina</footer>
 </body>
 </html>

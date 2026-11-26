@@ -1,0 +1,6 @@
+<form class="busca-topo" action="{{ url_for('buscar') }}" method="get" role="search" data-api="{{ url_for('api_buscar') }}">
+  <input type="search" name="q" placeholder="Pesquisar lugares" aria-label="Pesquisar lugares" aria-autocomplete="list" aria-controls="sugestoes-busca" autocomplete="off" required minlength="2" title="Digite o nome de um lugar para pesquisar">
+  <button type="submit">Pesquisar</button>
+  <ul class="sugestoes-busca" role="listbox"></ul>
+</form>
+<script src="{{ url_for('static', filename='buscar.js') }}" defer></script>
