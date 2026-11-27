@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% if empresa %}{{ empresa.nome }}{% else %}Empresa não encontrada{% endif %} | Floripa Urbana</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='estilo.css') }}">
+  <style>
+    .empresa-detalhe{max-width:900px}
+    .empresa-cabecalho{display:flex;align-items:center;gap:18px;margin-bottom:22px}
+    .simbolo-empresa{width:72px;height:72px;border-radius:16px;display:grid;place-items:center;background:#e5f1ef;color:var(--petroleo);font-size:34px;font-weight:800}
+    .empresa-cabecalho .simbolo-empresa{flex:none;width:72px;height:72px}
+    .empresa-cabecalho h1{margin:0}
+    .empresa-painel{background:#fff;border:1px solid var(--areia);border-radius:14px;padding:24px;margin:20px 0}
+    .empresa-painel h2{margin-top:0;color:var(--petroleo);font-family:Manrope,sans-serif}
+    .empresa-dados{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
+    .empresa-dado{padding:14px;background:#f8f6f3;border-radius:9px}
+    .empresa-dado strong{display:block;color:var(--petroleo);margin-bottom:5px}
+    .aviso-demo{padding:14px 18px;background:#fff3d9;border:1px solid #e7c878;border-radius:9px;color:#614b1d;line-height:1.55}
+    .form-passeio label{display:block;margin:14px 0 6px;font-weight:600}
+    .form-passeio input,.form-passeio select{display:block;padding:11px;width:100%;max-width:360px;border:1px solid var(--areia);border-radius:7px;font:inherit}
+    @media(max-width:600px){.empresa-painel{padding:18px}.empresa-cabecalho{align-items:flex-start}}
+  </style>
+</head>
+<body>
+  <header class="topo">
+    <a class="marca" href="/">Floripa Urbana</a>
+    <nav><a href="/">Início</a><a href="/mapa">Mapa</a><a href="{{ url_for('empresas_parceiras') }}">Empresas parceiras</a></nav>
+  </header>
+  <main class="secao empresa-detalhe">
+    {% if empresa %}
+      <p class="sobretitulo">Passeio guiado</p>
+      <div class="empresa-cabecalho">
+        <div class="simbolo-empresa" aria-hidden="true">{{ empresa.simbolo }}</div>
+        <h1>{{ empresa.nome }}</h1>
+      </div>
+      <p>{{ empresa.resumo }}</p>
+      <p class="aviso-demo"><strong>Demonstração:</strong> as informações, preços e canais de contato desta página são exemplos. O formulário não confirma uma reserva nem cobra qualquer valor.</p>
+
+      {% with mensagens = get_flashed_messages(with_categories=true) %}
+        {% for categoria, mensagem in mensagens %}<p class="mensagem {{ categoria }}" role="status">{{ mensagem }}</p>{% endfor %}
+      {% endwith %}
+
+      <section class="empresa-painel">
+        <h2>Sobre o passeio</h2>
+        <div class="empresa-dados">
+          <div class="empresa-dado"><strong>Guias</strong>{{ empresa.guias }}</div>
+          <div class="empresa-dado"><strong>Formato</strong>{{ empresa.tipo }}</div>
+          <div class="empresa-dado"><strong>Duração</strong>{{ empresa.duracao }}</div>
+          <div class="empresa-dado"><strong>Grupo</strong>{{ empresa.grupo }}</div>
+          <div class="empresa-dado"><strong>Valor ilustrativo</strong>R$ {{ empresa.preco }},00 por pessoa</div>
+        </div>
+        <p><strong>Roteiro:</strong> {{ empresa.roteiro }}</p>
+        <p><strong>O que inclui:</strong> {{ empresa.inclui }}</p>
+      </section>
+
+      <section class="empresa-painel">
+        <h2>Simular pedido de passeio</h2>
+        <p>Escolha uma data e o tamanho do grupo para ver como seria o pedido.</p>
+        <form class="form-passeio" method="post">
+          <label for="data">Data desejada</label>
+          <input id="data" name="data" type="date" required>
+          <label for="pessoas">Quantidade de pessoas</label>
+          <select id="pessoas" name="pessoas" required>
+            {% for quantidade in range(1, 11) %}<option value="{{ quantidade }}">{{ quantidade }} pessoa(s)</option>{% endfor %}
+          </select>
+          <button class="botao" type="submit">Simular pedido</button>
+        </form>
+      </section>
+
+      <section class="empresa-painel">
+        <h2>Contato de exemplo</h2>
+        <p>Canal ilustrativo: <strong>{{ empresa.contato }}</strong></p>
+        <p>Este contato é apenas um exemplo para a demonstração e não recebe mensagens.</p>
+      </section>
+      <a class="botao" href="{{ url_for('empresas_parceiras') }}">Voltar às empresas</a>
+    {% else %}
+      <h1>Empresa não encontrada</h1>
+      <p>Confira a lista de opções disponíveis.</p>
+      <a class="botao" href="{{ url_for('empresas_parceiras') }}">Ver empresas parceiras</a>
+    {% endif %}
+  </main>
+  <footer>Floripa Urbana · Florianópolis, Santa Catarina</footer>
+</body>
+</html>

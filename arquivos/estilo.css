@@ -319,3 +319,21 @@ footer {
     text-align: center;
     padding: 20px;
 }
+
+.link-mapa {
+  display:inline-flex;
+  align-items:center;
+  padding:12px 18px;
+  border:1px solid var(--medio);
+  border-radius:8px;
+  background:var(--medio);
+  color:white;
+  font-size:17px;
+  font-weight:600;
+}
+.link-mapa:hover {
+  background:var(--petroleo);
+  color:white;
+  text-decoration:none;
+}
+

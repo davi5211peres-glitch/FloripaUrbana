@@ -5,6 +5,37 @@ from werkzeug.security import check_password_hash, generate_password_hash
 import unicodedata
 from config import MYSQL_CONFIG
 from mapa import LOCAIS, montar_mapa
+
+
+EMPRESAS_GUIAS = [
+    {
+        "slug": "ilha-viva-roteiros", "nome": "Ilha Viva Roteiros", "simbolo": "☀",
+        "resumo": "Roteiros culturais pelo Centro Histórico, Mercado Público e Beira-Mar.",
+        "guias": "Marina e Caio", "tipo": "Passeio a pé", "grupo": "Até 8 pessoas",
+        "preco": 85, "duracao": "3 horas",
+        "roteiro": "Praça XV, Mercado Público e caminhos da Beira-Mar Norte.",
+        "inclui": "Acompanhamento de guia e paradas para fotos.",
+        "contato": "@ilhaviva.exemplo",
+    },
+    {
+        "slug": "trilhas-do-vento", "nome": "Trilhas do Vento", "simbolo": "〰",
+        "resumo": "Trilhas leves com paisagens, histórias e natureza da ilha.",
+        "guias": "Bia e Rafael", "tipo": "Trilha leve", "grupo": "Até 6 pessoas",
+        "preco": 120, "duracao": "4 horas",
+        "roteiro": "Caminhada guiada em trilha de nível leve, com pausas para descanso.",
+        "inclui": "Acompanhamento de guia e orientação sobre o percurso.",
+        "contato": "@trilhasdovento.exemplo",
+    },
+    {
+        "slug": "rota-da-lagoa", "nome": "Rota da Lagoa", "simbolo": "✦",
+        "resumo": "Passeio ilustrativo entre a Lagoa da Conceição, mirantes e praias do leste.",
+        "guias": "Nanda e Leo", "tipo": "Roteiro panorâmico", "grupo": "Até 10 pessoas",
+        "preco": 150, "duracao": "5 horas",
+        "roteiro": "Lagoa da Conceição, mirantes e paradas em praias do leste da ilha.",
+        "inclui": "Acompanhamento de guia; transporte não incluído nesta demonstração.",
+        "contato": "@rotadalagoa.exemplo",
+    },
+]
  
 app = Flask(__name__, template_folder="paginas", static_folder="arquivos", static_url_path="/static")
 app.secret_key = "chave-local-floripa-urbana"
@@ -227,6 +258,34 @@ def sair():
 def exibir_mapa():
     mapa_html = montar_mapa()
     return render_template("mapa.html", mapa_html=mapa_html)
+
+
+@app.route("/empresas-parceiras")
+def empresas_parceiras():
+    return render_template("empresas.html", empresas=EMPRESAS_GUIAS)
+
+
+@app.route("/empresas-parceiras/<slug>", methods=["GET", "POST"])
+def empresa_parceira(slug):
+    empresa = next((item for item in EMPRESAS_GUIAS if item["slug"] == slug), None)
+    if not empresa:
+        return render_template("empresa.html", empresa=None), 404
+    if request.method == "POST":
+        data = request.form.get("data", "").strip()
+        try:
+            pessoas = int(request.form.get("pessoas", "1"))
+        except ValueError:
+            pessoas = 0
+        if not data or not 1 <= pessoas <= 10:
+            flash("Escolha uma data e um grupo de 1 a 10 pessoas.", "erro")
+        else:
+            flash(
+                f"Simulação concluída: {pessoas} pessoa(s), data {data}. "
+                "Nenhuma reserva foi feita e nenhum valor foi cobrado.",
+                "sucesso",
+            )
+        return redirect(url_for("empresa_parceira", slug=slug))
+    return render_template("empresa.html", empresa=empresa)
 
 
 @app.route("/local/<int:local_id>", methods=["GET", "POST"])

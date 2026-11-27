@@ -10,7 +10,7 @@
   </style>
 </head>
 <body>
-  <header class="topo"><a class="marca" href="{{ url_for('inicio') }}">Floripa Urbana</a><nav><a href="{{ url_for('inicio') }}">Voltar ao início</a></nav></header>
+  <header class="topo"><a class="marca" href="{{ url_for('inicio') }}">Floripa Urbana</a><nav><a href="{{ url_for('inicio') }}">Voltar ao início</a><a href="{{ url_for('empresas_parceiras') }}">Empresas parceiras</a></nav></header>
   <main class="secao resultados-busca">
     <p class="sobretitulo">Pesquisar lugares</p><h1>Resultados da busca</h1>
     {% if resultados %}<p>{{ resultados|length }} resultado(s) para <strong>{{ termo }}</strong></p>{% for resultado in resultados %}<article class="resultado"><h2><a href="{{ resultado.url }}">{{ resultado.nome }}</a></h2></article>{% endfor %}{% elif termo %}<p>Nenhum lugar encontrado para <strong>{{ termo }}</strong>.</p>{% else %}<p>Digite o nome de um lugar para pesquisar.</p>{% endif %}

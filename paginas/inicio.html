@@ -13,6 +13,7 @@
     {% include '_busca.html' %}
     <nav>
       <a href="{{ url_for('outras') }}">Sobre</a>
+      <a href="{{ url_for('empresas_parceiras') }}">Empresas parceiras</a>
       {% if is_admin %}<a href="{{ url_for('admin') }}">Administração</a>{% endif %}
       {% if session.get('usuario_nome') %}
       <a href="{{ url_for('usuario') }}">Olá, {{ session.get('usuario_nome') }}</a>
@@ -36,7 +37,7 @@
     <section class="secao">
       <div class="cabecalho-secao">
         <div><p class="sobretitulo">Descobertas locais</p><h2>Pontos turísticos</h2></div>
-        <a href="{{ url_for('mapa') }}">Ir para mapa →</a>
+        <a class="link-mapa" href="{{ url_for('mapa') }}">Ir para mapa →</a>
       </div>
       {% if pontos %}
       <div class="grade">

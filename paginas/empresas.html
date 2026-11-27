@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Empresas parceiras | Floripa Urbana</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='estilo.css') }}">
+  <style>
+    .parceiros-intro{max-width:780px;margin-bottom:30px}
+    .aviso-demo{padding:14px 18px;background:#fff3d9;border:1px solid #e7c878;border-radius:9px;color:#614b1d;line-height:1.55}
+    .grade-parceiros{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px}
+    .parceiro{background:#fff;border:1px solid var(--areia);border-radius:14px;padding:22px;display:flex;flex-direction:column;align-items:flex-start}
+    .simbolo-empresa{width:58px;height:58px;border-radius:16px;display:grid;place-items:center;background:#e5f1ef;color:var(--petroleo);font-size:30px;font-weight:800;margin-bottom:14px}
+    .parceiro h2{font:700 21px Manrope,sans-serif;color:var(--petroleo);margin:0 0 8px}
+    .parceiro p{line-height:1.6;color:#53685e;margin:8px 0}
+    .parceiro .preco{font-weight:700;color:var(--petroleo)}
+    .parceiro .botao{margin-top:auto;padding:11px 16px}
+    .tags-parceiro{font-size:13px;color:#61736a}
+  </style>
+</head>
+<body>
+  <header class="topo">
+    <a class="marca" href="/">Floripa Urbana</a>
+    <nav><a href="/">Início</a><a href="/mapa">Mapa</a></nav>
+  </header>
+  <main class="secao">
+    <div class="parceiros-intro">
+      <p class="sobretitulo">Conheça Floripa acompanhado</p>
+      <h1>Empresas parceiras</h1>
+      <p>Encontre passeios guiados e explore Florianópolis com mais contexto, histórias e companhia.</p>
+      <p class="aviso-demo"><strong>Demonstração do projeto:</strong> roteiros e valores são ilustrativos. O pedido de passeio é uma simulação e não gera reserva nem cobrança.</p>
+    </div>
+    <div class="grade-parceiros">
+      {% for empresa in empresas %}
+      <article class="parceiro">
+        <div class="simbolo-empresa" aria-hidden="true">{{ empresa.simbolo }}</div>
+        <h2>{{ empresa.nome }}</h2>
+        <p>{{ empresa.resumo }}</p>
+        <p class="tags-parceiro">Guias: {{ empresa.guias }} · {{ empresa.tipo }} · {{ empresa.grupo }}</p>
+        <p class="preco">A partir de R$ {{ empresa.preco }},00 por pessoa</p>
+        <a class="botao" href="{{ url_for('empresa_parceira', slug=empresa.slug) }}">Conhecer passeio</a>
+      </article>
+      {% endfor %}
+    </div>
+  </main>
+  <footer>Floripa Urbana · Florianópolis, Santa Catarina</footer>
+</body>
+</html>

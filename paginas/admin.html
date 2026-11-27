@@ -10,7 +10,7 @@
   </style>
 </head>
 <body>
-  <header class="topo"><a class="marca" href="{{ url_for('inicio') }}">Floripa Urbana</a><nav><a href="{{ url_for('inicio') }}">Início</a><a href="{{ url_for('usuario') }}">Minha conta</a></nav></header>
+  <header class="topo"><a class="marca" href="{{ url_for('inicio') }}">Floripa Urbana</a><nav><a href="{{ url_for('inicio') }}">Início</a></nav></header>
   <main class="secao">
     <p class="sobretitulo">Painel de controle</p><h1>Administração</h1>
     {% with mensagens = get_flashed_messages(with_categories=true) %}{% for categoria, mensagem in mensagens %}<p class="mensagem {{ categoria }}">{{ mensagem }}</p>{% endfor %}{% endwith %}
