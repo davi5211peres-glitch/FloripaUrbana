@@ -13,21 +13,21 @@
   <header class="topo">
     <a class="marca" href="{{ url_for('inicio') }}">Floripa Urbana</a>
     <nav>
-      <a href="{{ url_for('inicio') }}">In&iacute;cio</a>
+      <a href="{{ url_for('inicio') }}">Início</a>
     </nav>
   </header>
   <main class="secao conta">
-    <p class="sobretitulo">&Aacute;rea pessoal</p>
+    <p class="sobretitulo">Área pessoal</p>
     <h1>Minha conta</h1>
     <section class="perfil">
-      <h2>Ol&aacute;, {{ conta.nome }}</h2>
+      <h2>Olá, {{ conta.nome }}</h2>
       <div class="perfil-grid">
         <div class="perfil-dado"><strong>Nome</strong><span>{{ conta.nome }}</span></div>
         <div class="perfil-dado"><strong>E-mail protegido</strong><span>{{ email_mascarado }}</span></div>
-        <div class="perfil-dado"><strong>Tipo de conta</strong><span>{% if is_admin %}Administrador{% else %}Usu&aacute;rio{% endif %}</span></div>
-        <div class="perfil-dado"><strong>Avalia&ccedil;&otilde;es publicadas</strong><span>{{ total_avaliacoes }}</span></div>
-        <div class="perfil-dado"><strong>N&uacute;mero da conta</strong><span>#{{ conta.id }}</span></div>
-        <div class="perfil-dado"><strong>Cadastro em</strong><span>{% if conta.criado_em %}{{ conta.criado_em.strftime('%d/%m/%Y') }}{% else %}&mdash;{% endif %}</span></div>
+        <div class="perfil-dado"><strong>Tipo de conta</strong><span>{% if is_admin %}Administrador{% else %}Usuário{% endif %}</span></div>
+        <div class="perfil-dado"><strong>Avaliações publicadas</strong><span>{{ total_avaliacoes }}</span></div>
+        <div class="perfil-dado"><strong>Número da conta</strong><span>#{{ conta.id }}</span></div>
+        <div class="perfil-dado"><strong>Cadastro em</strong><span>{% if conta.criado_em %}{{ conta.criado_em.strftime('%d/%m/%Y') }}{% else %}—{% endif %}</span></div>
       </div>
       <a class="botao" href="{{ url_for('sair') }}">Sair da conta</a>
     </section>

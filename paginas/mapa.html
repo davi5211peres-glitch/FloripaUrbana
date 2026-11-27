@@ -18,18 +18,18 @@
 <body>
   <header class="topo">
     <a class="marca" href="{{ url_for('inicio') }}">Floripa Urbana</a>
-    <nav><a href="{{ url_for('inicio') }}">In&iacute;cio</a></nav>
+    <nav><a href="{{ url_for('inicio') }}">Início</a></nav>
   </header>
   <main class="secao secao-mapa">
     <div class="mapa-intro">
       <p class="sobretitulo">Explore a ilha</p>
-      <h1>Mapa de Florian&oacute;polis</h1>
-      <p>Arraste para navegar e use os controles para aproximar. Selecione um marcador para ver o ponto tur&iacute;stico.</p>
+      <h1>Mapa de Florianópolis</h1>
+      <p>Arraste para navegar e use os controles para aproximar. Selecione um marcador para ver o ponto turístico.</p>
     </div>
     <div class="mapa-container">
-      <iframe title="Mapa interativo de Florian&oacute;polis" srcdoc="{{ mapa_html }}"></iframe>
+      <iframe title="Mapa interativo de Florianópolis" srcdoc="{{ mapa_html }}"></iframe>
     </div>
   </main>
-  <footer>Floripa Urbana &middot; Florian&oacute;polis, Santa Catarina</footer>
+  <footer>Floripa Urbana · Florianópolis, Santa Catarina</footer>
 </body>
 </html>

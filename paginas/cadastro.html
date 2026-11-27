@@ -10,12 +10,12 @@
   <header class="topo">
     <a class="marca" href="{{ url_for('inicio') }}">Floripa Urbana</a>
     <nav>
-      <a href="{{ url_for('inicio') }}">Voltar ao in&iacute;cio</a>
+      <a href="{{ url_for('inicio') }}">Voltar ao início</a>
     </nav>
   </header>
 
   <main class="secao conta">
-    <p class="sobretitulo">Fa&ccedil;a parte</p>
+    <p class="sobretitulo">Faça parte</p>
     <h1>Crie sua conta</h1>
 
     {% with mensagens = get_flashed_messages(with_categories=true) %}
@@ -43,7 +43,7 @@
       </label>
 
       <button class="botao" type="submit">Cadastrar</button>
-      <p>J&aacute; tem conta? <a href="{{ url_for('entrar', next=next) }}">Entrar</a></p>
+      <p>Já tem conta? <a href="{{ url_for('entrar', next=next) }}">Entrar</a></p>
     </form>
   </main>
 

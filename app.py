@@ -164,18 +164,25 @@ def usuario():
 def cadastro():
     if request.method == "POST":
         nome = request.form.get("nome", "").strip()
-        email = request.form.get("email", "").strip()
+        email = request.form.get("email", "").strip().casefold()
         senha = request.form.get("senha", "")
         if not nome or not email or not senha:
             flash("Preencha nome, e-mail e senha.", "erro")
         else:
             try:
+                existentes = consultar("SELECT id FROM usuarios WHERE email = %s LIMIT 1", (email,), retornar=True)
+                if existentes:
+                    flash("Este e-mail já está cadastrado. Tente entrar na sua conta.", "erro")
+                    return render_template("cadastro.html", next=request.form.get("next", ""))
                 consultar("INSERT INTO usuarios (nome, email, senha) VALUES (%s, %s, %s)", (nome, email, generate_password_hash(senha)))
                 flash("Cadastro realizado com sucesso.", "sucesso")
                 return redirect(url_for("entrar", next=request.form.get("next", "")))
             except Error as erro:
                 app.logger.warning("Falha no cadastro: %s", erro)
-                flash("Não foi possível concluir o cadastro. Verifique se o e-mail já está cadastrado.", "erro")
+                if getattr(erro, "errno", None) == 1062:
+                    flash("Este e-mail já está cadastrado. Tente entrar na sua conta.", "erro")
+                else:
+                    flash("Não foi possível concluir o cadastro agora. Tente novamente.", "erro")
     return render_template("cadastro.html", next=request.args.get("next", ""))
  
  
@@ -183,7 +190,7 @@ def cadastro():
 def entrar():
     if request.method == "GET":
         return render_template("entrar.html", next=request.args.get("next", ""))
-    email = request.form.get("email", "").strip()
+    email = request.form.get("email", "").strip().casefold()
     senha = request.form.get("senha", "")
     try:
         preparar_colunas_admin()
@@ -193,8 +200,12 @@ def entrar():
         )
     except Error as erro:
         app.logger.warning("Falha no login: %s", erro)
-        usuarios = []
-    if usuarios and check_password_hash(usuarios[0]["senha"], senha) and not usuarios[0]["banido"]:
+        flash("Não foi possível acessar as contas agora. Tente novamente mais tarde.", "erro")
+        return redirect(url_for("entrar", next=request.form.get("next", "")))
+    if usuarios and check_password_hash(usuarios[0]["senha"], senha) and usuarios[0]["banido"]:
+        flash("Esta conta está suspensa. Fale com a administração do site.", "erro")
+        return redirect(url_for("entrar", next=request.form.get("next", "")))
+    if usuarios and check_password_hash(usuarios[0]["senha"], senha):
         session["usuario_id"] = usuarios[0]["id"]
         session["usuario_nome"] = usuarios[0]["nome"]
         proxima = request.form.get("next", "")
@@ -202,7 +213,7 @@ def entrar():
             return redirect(proxima)
         return redirect(url_for("inicio"))
     else:
-        flash("E-mail/senha invalidos ou conta banida.", "erro")
+        flash("E-mail ou senha incorretos. Confira os dados e tente novamente.", "erro")
     return redirect(url_for("entrar", next=request.form.get("next", "")))
  
  
@@ -270,6 +281,37 @@ def detalhe_local(local_id):
             except Error as erro:
                 app.logger.warning("Falha ao excluir avaliação: %s", erro)
                 flash("Não foi possível remover a avaliação.", "erro")
+            return redirect(url_for("detalhe_local", local_id=local_id) + "#avaliacoes")
+        acao = request.form.get("acao", "")
+        if acao in {"editar_avaliacao", "excluir_propria_avaliacao"}:
+            atual = usuario_atual()
+            if not atual or atual["is_admin"]:
+                flash("Essa opção está disponível para contas comuns.", "erro")
+                return redirect(url_for("detalhe_local", local_id=local_id) + "#avaliacoes")
+            avaliacao_id = request.form.get("avaliacao_id", "")
+            propria = consultar(
+                "SELECT id FROM avaliacoes_locais WHERE id = %s AND local_id = %s AND usuario_id = %s",
+                (avaliacao_id, local_id, atual["id"]), retornar=True,
+            )
+            if not propria:
+                flash("Você só pode alterar uma avaliação publicada pela sua conta.", "erro")
+            elif acao == "excluir_propria_avaliacao":
+                consultar("DELETE FROM avaliacoes_locais WHERE id = %s AND local_id = %s AND usuario_id = %s", (avaliacao_id, local_id, atual["id"]))
+                flash("Sua avaliação foi excluída.", "sucesso")
+            else:
+                comentario = request.form.get("comentario", "").strip()
+                try:
+                    nota = int(request.form.get("nota", ""))
+                except ValueError:
+                    nota = 0
+                if not comentario or nota not in range(1, 6):
+                    flash("Escreva um comentário e escolha uma nota de 1 a 5.", "erro")
+                else:
+                    consultar(
+                        "UPDATE avaliacoes_locais SET nota = %s, comentario = %s WHERE id = %s AND local_id = %s AND usuario_id = %s",
+                        (nota, comentario, avaliacao_id, local_id, atual["id"]),
+                    )
+                    flash("Sua avaliação foi atualizada.", "sucesso")
             return redirect(url_for("detalhe_local", local_id=local_id) + "#avaliacoes")
         atual = usuario_atual()
         if not atual:

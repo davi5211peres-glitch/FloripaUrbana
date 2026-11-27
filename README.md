@@ -1,6 +1,20 @@
 # FloripaUrbana
 Guia digital com pontos turísticos para valorização regional, pois à um problema de que os moradores e visitantes nem sempre conhecem os pontos turísticos e culturais da região.
 
+## Banco de dados
+
+O aplicativo le as variaveis `MYSQL_HOST`, `MYSQL_PORT`, `MYSQL_USER`, `MYSQL_PASSWORD` e `MYSQL_DATABASE`. Para configurar no PowerShell antes de iniciar o app:
+
+```powershell
+$env:MYSQL_HOST = "127.0.0.1"
+$env:MYSQL_USER = "root"
+$env:MYSQL_PASSWORD = "SENHA_CORRETA_DO_MYSQL"
+$env:MYSQL_DATABASE = "floripa_urbana"
+python app.py
+```
+
+Crie o banco executando `banco_de_dados.sql` caso ele ainda nao exista.
+
 ## Administração
 
 Após criar uma conta normalmente, conceda acesso administrativo a ela no MySQL:
